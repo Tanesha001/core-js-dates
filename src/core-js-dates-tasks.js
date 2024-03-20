@@ -183,10 +183,19 @@ function getCountWeekendsInMonth(month, year) {
  * Date(2024, 0, 31) => 5
  * Date(2024, 1, 23) => 8
  */
-function getWeekNumberByDate(/* date */) {
-  throw new Error('Not implemented');
-}
+function getWeekNumberByDate(date) {
+  const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+  const start = new Date(firstDayOfYear);
+  const end = new Date(date);
+  const msecondsByDay = 86400000;
+  const shift = firstDayOfYear.getDay() === 7 ? 1 : 0;
 
+  start.setDate(firstDayOfYear.getDate() + shift);
+  end.setDate(date.getDate() + ((-date.getDay() + 7) % 7));
+
+  const difference = Math.floor((end - start) / msecondsByDay);
+  return Math.floor(difference / 7) + 1;
+}
 /**
  * Returns the date of the next Friday the 13th from a given date.
  * Friday the 13th is considered an unlucky day in some cultures.
